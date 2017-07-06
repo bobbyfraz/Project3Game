@@ -1,6 +1,7 @@
 var Engine = Matter.Engine,
     Render = Matter.Render,
     Runner = Matter.Runner,
+    Events = Matter.Events,
     Composites = Matter.Composites,
     Constraint = Matter.Constraint,
     MouseConstraint = Matter.MouseConstraint,
@@ -12,7 +13,7 @@ var Engine = Matter.Engine,
 var engine;
 var world;
 var path = [];
-var particles = [];
+var circles = [];
 var boundaries = [];
 var mConstraint;
 
@@ -21,75 +22,80 @@ var mConstraint;
 var resolution = 70;
 
 var earth;
-var p;
 var bound;
+var img;
+
+
 
 //var end;
+Events.on(engine, 'collisionStart', function(e) {
+    console.log("collision");
+  var i, pair,
+  length = e.pairs.length;
+  for(i = 0; i < length; i++) {
+    pair = event.pairs[i];
+    if(!(pair.bodyA.label === 'circles' || pair.bodyB.label === 'circles')) {
+      continue;
+    }
+  
+  }
+});
+
 
 function setup() {
-  console.log("setup called");
-  var canvas = createCanvas(600, 600);
-  var engine = Engine.create(),
-      world = engine.world;
-  earth = new Orbit(width/2, height/2, width/6, 1);
-  earth.addSatellite(100, 100, 50, 1);
-  earth.addSatellite(150, 200, 50, 2);
-  earth.addSatellite(200, 100, 40, 3);
-  console.log("setup called2");
+var canvas = createCanvas(windowWidth, windowHeight);
+canvas.position(0,0);
+canvas.style('z-index' ,'1');
+colorMode(HSB);
+   engine = Engine.create()
+   world = engine.world;
+   earth = new Orbit(width/2, height/2, width/6, 1);
+  // earth.addSatellite(100, 100, 50, 1);
+  // earth.addSatellite(150, 200, 50, 2);
+   // earth.addSatellite(200, 100, 40, 3);
+   // var parti = new Particle (50,450,10);
+   // particles.push(parti);
+
+
+ 
+}
+function mousePressed() {
 
   var canvasmouse = Mouse.create(canvas.elt);
-  canvasmouse.pixelRatio = pixelDensity();
-  console.log(canvasmouse);
-  var options = {
-    mouse:canvasmouse
-  }
-  mConstraint = MouseConstraint.create(engine, options);
-  World.add(world, mConstraint);
-  console.log(mConstraint);
+     console.log(canvasmouse); 
+     canvasmouse.pixelRatio = pixelDensity();
+     var options = 
+     {
+     mouse:canvasmouse
+     }
 
+     mConstraint = MouseConstraint.create(engine, options);
+     World.add(world, mConstraint);
+     console.log(mConstraint);
 
-
-function particle(){
- ///var p// = new Particle(10, 100, 10);
-  // p.isOffScreen(10,100,10);
-var prev = null;
-  for (var x = 200; x < 400; x += 20) {
-
-    var fixed = false;
-    if (!prev) {
-      fixed = true;
-    }
-    var p = new Particle(x, 100, 5, fixed);
-     //var p2 = new Particle(200, 150, 10);
-    particles.push(p);
-    fill(0,255,0);
-
-    if (prev) {
-      var options = {
-        bodyA: p.body,
-        bodyB: prev.body,
-        length: 20,
-        stiffness: 0.4
-      }
-      var constraint = Constraint.create(options);
-      World.add(world, constraint);
-    }
-
-    prev = p;
-  }
+  earth.addSatellite(mouseX, mouseY, 50, 1);
+  //circles.push(new Circle(mouseX, mouseY, random(5, 10)));
 }
-function boundry(){
-bound = new Boundary(200, height, width, 50, 0);
-boundaries.push(bound);
+    
+  console.log("Mouse pressed");
+
+
+function mouseReleased() {
+    
+  console.log("Mouse released");
+  //earth.addSatellite(mouseX, mouseY, 50, 1);
+  
 }
 
+function mouseDragged() {
+  earth.addSatellite(mouseX, mouseY, 50, 1);
+  //circles.push(new Circle(mouseX, mouseY, random(5, 10)));
 }
+
 
 
 function draw() {
-
-console.log("draw called");
-  background(51); 
+  background(0, 128, 0, 30); 
 
   for (var i = 0; i < resolution; i++) 
     {
@@ -106,36 +112,23 @@ console.log("draw called");
       earth.child[j].show();
     }
     console.log("earth show");
-  // p.show(); 
-    for (var i = 0; i < particles.length; i++)
+
+    for (var i = 0; i < circles.length; i++)
      {
-      particles[i].show();
-      fill(0,255,0);
-      console.log("particles")
+      circles[i].show();
      }
    //bound.show();
 
-  for (var i = 0; i < boundaries.length; i++)
-   {
-    boundaries[i].show();
-   }
-
-
-    if (mConstraint.body) {
-    var pos = mConstraint.body.position;
-    fill(0,255,0);
-    ellipse(pos.x ,pos.y, 20, 20);
-    var offset = mConstraint.constraint.pointB;
-    var m = mConstraint.mouse.position;
-    stroke(0, 255, 0);
-    line(pos.x + offset.x, pos.y + offset.y, m.x, m.y);
-  }
-
-   beginShape();
-  // //stroke(255, 0, 255);
-  fill(0,255,0);
-  // for (var pos of path) {
-  //   vertex(pos.x, pos.y);
-  // }
-  // endShape();
-}
+  // for (var i = 0; i < boundaries.length; i++)
+  //  {
+  //   boundaries[i].show();
+  //  }
+    // if (mConstraint.body) {
+    // var pos = mConstraint.body.position;
+    // fill(0,255,0);
+    // ellipse(pos.x ,pos.y, 20, 20);
+    // var offset = mConstraint.constraint.pointB;
+    // var m = mConstraint.mouse.position;
+    // stroke(0, 255, 0);
+    // line(pos.x + offset.x, pos.y + offset.y, m.x, m.y);
+ }
