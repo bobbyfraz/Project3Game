@@ -2,8 +2,8 @@ var express = require("express");
 var bodyParser = require("body-parser");
 var logger = require("morgan");
 var mongoose = require("mongoose");
-var order = require("./models/order.js");
-var user = require("./lib/User.js");
+//var order = require("./models/order.js");
+//var user = require("./lib/User.js");
 // var request = require("request");
 // var cheerio = require("cheerio");
 
