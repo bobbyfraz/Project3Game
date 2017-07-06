@@ -30,7 +30,7 @@ var video;
 
 
 function preload(){
-  bg = loadImage("https://static.pexels.com/photos/110854/pexels-photo-110854.jpeg");
+  //bg = loadImage("https://static.pexels.com/photos/110854/pexels-photo-110854.jpeg");
   // backsound = loadSound("assets/background.wav");
   // shoot = loadSound("assets/shoot.mp3");
   // boom = loadSound("assets/collision.mp3");
@@ -77,7 +77,7 @@ function setup() {
 function draw() 
 {
   //canvas.scale(0.5, 0.5);
-  background(bg);
+  background(127);
   stroke(226, 204, 0);
   Engine.update(engine);
 
