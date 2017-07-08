@@ -123,6 +123,9 @@ io.sockets.on('connection', function(socket){
 	}
 });
 
+app.use(express.static("./public/satellite-game"));
+app.use(express.static("./public/satellite-game/assets"));
+
 app.listen(port, function() {
   console.log("App running on port ", port);
 });
