@@ -27,8 +27,13 @@ app.use(bodyParser.json({ type: "application/vnd.api+json" }));
 app.use(express.static("public"));
 
 // Database configuration with mongoose
-mongoose.connect("mongodb://heroku_dqj90bjh:7hul1v2v195dta1kumu4sookdk@ds141242.mlab.com:41242/heroku_dqj90bjh");
-mongoose.connect('mongodb://heroku_kqxcxvjb:v013pehj9jabhajnh039cjelc4@ds011734.mlab.com:11734/heroku_kqxcxvjb');
+if(process.env.MONGODB_URI){
+	mongoose.connect(process.env.MONGODB_URI);
+}
+else{
+	mongoose.connect("mongodb://localhost/test")
+}
+
 var db = mongoose.connection;
 
 db.on("error", function(error) {
@@ -122,9 +127,6 @@ io.sockets.on('connection', function(socket){
 		io.sockets.emit('get users', users);
 	}
 });
-
-app.use(express.static("./public/satellite-game"));
-app.use(express.static("./public/satellite-game/assets"));
 
 app.listen(port, function() {
   console.log("App running on port ", port);
