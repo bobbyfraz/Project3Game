@@ -18,60 +18,99 @@ var particles = []; //The Satellites
 var boundries =[];
 var mousepress_x, mousepress_y;
 var bg;
-var backsound;
-var shoot;
-var boom;
-var collisionCounter = 0;
-var totalLifes = 5;
-var scoreAtGameOver = 0;
-var isGameOver = false;
-var button;
-var video;
+//var backsound;
+//var shoot;
+//var boom;
+var totalLifes, scoreAtGameOver, isGameOver, collisionCounter; //Variables needing reset
+var bestScoreSoFar = 0;
+var endgameButton, replaygameButton;
 
 
-function preload(){
-  bg = loadImage("https://static.pexels.com/photos/110854/pexels-photo-110854.jpeg");
-  // backsound = loadSound("assets/background.wav");
-  // shoot = loadSound("assets/shoot.mp3");
-  // boom = loadSound("assets/collision.mp3");
-
+function preload()
+{
+  bg = loadImage("img.jpeg");
+  //backsound = loadSound("background.wav");
+  //shoot = loadSound("shoot.mp3");
+  //boom = loadSound("collision.mp3");
 }
 
 function setup() {
    var w = window.innerWidth;
    var h = window.innerHeight;
-   // backsound = loadSound("assets/background.wav");
+
+   //Canvas
    canvas = createCanvas(w, h);
-   canvas.id("game");
    canvas.position(0,0);
-   canvas.style('z-index' ,'1');
-   canvas.scale(6, 6);
-   // backsound.play();
+  
+   //Buttons
+   endgameButton = createButton("End Game");
+   endgameButton.mouseClicked(endGame);
+   endgameButton.position(120, 180);
+  
+   replaygameButton = createButton("Replay Game");
+   replaygameButton.mouseClicked(replayGame); 
+   replaygameButton.position(200, 180);
+
+   //backsound.play();
+
    colorMode(HSB);
 
-   engine = Engine.create();
-   Matter.Events.on(engine, "collisionStart", collisionOccured); //Event to handle collision
+   populateTheWorld();
+   replayGame();
 
-   world = engine.world;
-   world.gravity.scale = 1;
+}
+
+function populateTheWorld()
+{
+  engine = Engine.create();
+  Matter.Events.on(engine, "collisionStart", collisionOccured); //Event to handle collision
+
+  world = engine.world;
+  world.gravity.scale = 1;
 
    //Create Earth
-   var w = window.innerWidth;
-   var h = window.innerHeight;
+  var w = window.innerWidth;
+  var h = window.innerHeight;
 
-   earths.push(new Earth(w/2,h/2,30));
+  earths.push(new Earth(w/2,h/2,30));
    //earths.push(new Earth(3*w/4,h/2,30));
    //earths.push(new Earth(w/4,h/2,30));
 
-   engine.world.gravity.x = 0;
-   engine.world.gravity.y = 0;
+  engine.world.gravity.x = 0;
+  engine.world.gravity.y = 0;
 
    new Boundary(-w/2, h/2, w, h, 0);
    new Boundary(w/2, -h/2, w, h, 0);
    new Boundary(1.5*w, h/2, w, h, 0);
    new Boundary(w/2, 1.5*h, w, h, 0);
+}
 
+//Replay the game
+function replayGame(){
+
+  //Remove all satellites if there are any remaining from previous run
+  for (var i = 0; i < particles.length; i++)
+  {
+    particles[i].removeFromWorld();
+  }
+  particles = [];
+
+  //Reset the variables
+  totalLifes = 5;
+  scoreAtGameOver = 0;
+  isGameOver = false;
+  collisionCounter = 0;
+
+  endgameButton.hide();
+  replaygameButton.hide();
  }
+
+//End the game
+function endGame()
+{
+  remove();
+}
+
 
 //The draw event
 function draw() 
@@ -98,40 +137,50 @@ function draw()
   }
  // button =createButton("Play Again" ,920,100);
  // button.mousePressed();
-  textSize(32);
-  fill(255);
+
+  textSize(30);
+  fill(127);
+
+  updateScore();
+}
+
+function updateScore()
+{
   if(!isGameOver)
   {
-    text("Satellites in orbit: " + particles.length, 920, 100);
-    text("Collisions remaining: " + (totalLifes - collisionCounter), 920, 130);
+    text("Satellites in orbit: " + particles.length, 70, 80);
+    text("Collisions remaining: " + (totalLifes - collisionCounter), 70, 115);
+    text("Best score so far: " + bestScoreSoFar, 70, 145);
   }
   else
   {
-    text("Game Over!", 920, 100);
-    text("Final Score : " + scoreAtGameOver, 920, 130);
+    text("Game Over!", 70, 80);
+    text("Final Score : " + scoreAtGameOver, 70, 115);
+    text("Best score so far: " + bestScoreSoFar, 70, 145);
+    endgameButton.show();
+    replaygameButton.show();
   }
 }
 
 
+/* Functions to launch a satellite using mouse */
 function mousePressed() 
 {
-  // backsound.play();
-  mousepress_x = mouseX;
-  mousepress_y = mouseY;
-
+    mousepress_x = mouseX;
+    mousepress_y = mouseY;
 }
 
-
 function mouseReleased() {
- // particles[i].show(mouseX, mouseY, 10);
-  var satellite = new Particle(mouseX, mouseY, 10);
-  particles.push(satellite);
-  var scalingfactor = 1e-2;
-  force_x = (mousepress_x - mouseX)*scalingfactor;
-  force_y = (mousepress_y - mouseY)*scalingfactor;
-  Matter.Body.applyForce(satellite.body, { x: 0, y: 0 }, { x: force_x, y: force_y });
-  //shoot.play();  
-
+  if(!isGameOver)
+  {
+    var satellite = new Particle(mouseX, mouseY, 10);
+    particles.push(satellite);
+    var scalingfactor = 1e-2;
+    force_x = (mousepress_x - mouseX)*scalingfactor;
+    force_y = (mousepress_y - mouseY)*scalingfactor;
+    Matter.Body.applyForce(satellite.body, { x: 0, y: 0 }, { x: force_x, y: force_y });
+    //shoot.play();  
+  }
 }
 
 function removeSatellite(body)
@@ -168,9 +217,16 @@ function collisionOccured(event)
   {
     isGameOver = true;
     scoreAtGameOver = particles.length;
+    if(scoreAtGameOver > bestScoreSoFar)
+    {
+        bestScoreSoFar = scoreAtGameOver;  
+    }
+    //boom.play();
   }
-  // boom.play();
 }
+
+
+
 
 function globalStart(){
   if (document.readyState === 'complete') {

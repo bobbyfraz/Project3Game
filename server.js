@@ -26,6 +26,9 @@ app.use(bodyParser.json({ type: "application/vnd.api+json" }));
 // Make public a static dir
 app.use(express.static("public"));
 
+app.use(express.static("./public/satellite-game"));
+app.use(express.static("./public/satellite-game/assets"));
+
 // Database configuration with mongoose
 if(process.env.MONGODB_URI){
 	mongoose.connect(process.env.MONGODB_URI);
