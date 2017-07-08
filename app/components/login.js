@@ -13,7 +13,7 @@ var login = React.createClass({
         <div className="row">
 
           <div className="col-lg-12">
-                <h1>empty space</h1>
+                <a href="">Chat Link</a>
 
           </div>
 
