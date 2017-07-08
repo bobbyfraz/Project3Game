@@ -1,7 +1,6 @@
 // Include React
 var React = require("react");
 
-import styler from 'react-styling'
 
 var register = React.createClass({
 
