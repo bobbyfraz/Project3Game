@@ -6,8 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
-    "build": "npm install -g webpack; webpack",
-    "heroku-postbuild": "npm install -g webpack; webpack"
+    "build": "webpack -p",
+    "heroku-postbuild": "webpack -p"
   },
   "author": "vanessaotto",
   "license": "ISC",
