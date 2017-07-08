@@ -3,6 +3,8 @@ var React = require("react");
 // Including the Link component from React Router to navigate within our application without full page reloads
 var Link = require("react-router").Link;
 
+
+
 // Create the Main component
 var Main = React.createClass({
 
@@ -19,7 +21,7 @@ var Main = React.createClass({
           <Link to="/register"><h4 className = "page-scroll" id="register" >Register</h4></Link>
           </div>
           <div className="col-lg-2 col-md-offset-1 col-md-1 col-sm-10" >
-            <Link to="/login"><h4 className = "page-scroll" id="login">Chat</h4></Link>
+            <Link to="/login"><h4 className = "page-scroll" id="login">Login</h4></Link>
             </div>
             <div className="col-lg-offset-1 col-lg-2 col-md-2 col-sm-10" >
             <Link to="/play"><h4 className = "page-scroll" id="play">Play Game</h4></Link>
