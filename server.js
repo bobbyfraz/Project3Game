@@ -48,16 +48,25 @@ db.once("open", function() {
 });
 
 app.post("/signup", function(req,res){
-	if (req.body)
-	{
-		res.json(req.body);
-	}
-	else{
-		res.json({
-			completed:"error on sign up"
+
+		var user = new UserTrack({
+		name : req.body.name,
+		email : req.body.email,
+		mobile :req.body.mobile,
+		password : req.body.password
+	});
+		user.save(function(error, user){
+			if
+				(error){
+				res.json({ error: "could not create userpost"});
+			}
+			else{
+				res.json(user);
+			}
 		});
-	}
+	return;
 });
+
 
 app.get('/', function(req,res) {
     res.sendFile(__dirname + "/public/index.html");
