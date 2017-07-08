@@ -13,12 +13,7 @@ var login = React.createClass({
         <div className="row">
 
           <div className="col-lg-12">
-
-            <div className="panel panel-default">
-              <div className="panel-heading">
                 <h1>empty space</h1>
-              </div>
-            </div>
 
           </div>
 

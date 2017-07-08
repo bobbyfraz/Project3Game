@@ -3,6 +3,8 @@ var React = require("react");
 // Including the Link component from React Router to navigate within our application without full page reloads
 var Link = require("react-router").Link;
 
+
+
 // Create the Main component
 var Main = React.createClass({
 
@@ -14,21 +16,19 @@ var Main = React.createClass({
       <div className="container">
 
         <div className="row">
-
-          <div className="jumbotron">
-            <h1>React Router</h1>
-            <p><em>Space Game</em></p>
-            <div className = "col-lg-offset-8 col-lg-4">
-            <Link to="/register"><button className="btn btn-default">Register</button></Link>
-            <Link to="/login"><button className="btn btn-default">Login</button></Link>
-            <Link to="/play"><button className="btn btn-default">Play Game</button></Link>
-            </div>
-
+        <div className="firstrow col-lg-12 col-md-12 col-sm-12">
+        <div className="col-lg-offset-2 col-lg-2 col-md-offset-3 col-md-1 col-sm-10" >
+          <Link to="/register"><h4 className = "page-scroll" id="register" >Register</h4></Link>
           </div>
-
-          <div className="row">
-            <div className="text-center">
+          <div className="col-lg-2 col-md-offset-1 col-md-1 col-sm-10" >
+            <Link to="/login"><h4 className = "page-scroll" id="login">Login</h4></Link>
             </div>
+            <div className="col-lg-offset-1 col-lg-2 col-md-2 col-sm-10" >
+            <Link to="/play"><h4 className = "page-scroll" id="play">Play Game</h4></Link>
+          </div>
+        </div>
+          <div className="row">
+          </div>
           </div>
 
           <div className="container">
@@ -39,7 +39,6 @@ var Main = React.createClass({
           </div>
         </div>
 
-      </div>
     );
   }
 });
